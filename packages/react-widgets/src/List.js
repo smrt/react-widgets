@@ -36,6 +36,7 @@ const propTypes = {
 
   isDisabled: PropTypes.func.isRequired,
   groupBy: CustomPropTypes.accessor,
+  itemLimit: PropTypes.number,
 
   messages: PropTypes.shape({
     emptyList: PropTypes.func.isRequired,
@@ -62,8 +63,13 @@ class List extends React.Component {
   }
 
   mapItems(fn) {
-    const { data, dataState } = this.props
+    const { dataState, itemLimit } = this.props
+    let { data } = this.props;
     let { sortedKeys, groups } = dataState;
+
+    if (itemLimit > 0) {
+         data = data.slice(0, itemLimit);
+    }
 
     if (!groups)
       return data.map((item, idx) => fn(item, idx, false))
